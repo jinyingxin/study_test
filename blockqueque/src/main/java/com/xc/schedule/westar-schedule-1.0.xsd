@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.cdwestarsoft.com/schema/schedule"
+            xmlns="http://www.cdwestarsoft.com/schema/schedule"
+            elementFormDefault="qualified">
+
+    <xsd:element name="schedule">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="group" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="job" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:attribute name="name" type="alphanumericType" use="required"/>
+                                    <xsd:attribute name="description" type="stringType" use="required"/>
+                                    <xsd:attribute name="invokeTarget" type="stringType" use="required"/>
+                                    <xsd:attribute name="cronExp" type="stringType" use="required"/>
+                                    <xsd:attribute name="concurrent" type="booleanType" default="N"/>
+                                    <xsd:attribute name="misfireStrategy" type="misfireStrategyType" default="DoNothing"/>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="name" type="alphanumericType" default="DEFAULT"/>
+                        <xsd:attribute name="description" type="stringType" default="默认分组"/>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="booleanType">
+        <xsd:annotation>
+            <xsd:documentation>
+                boolean值限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Y"/>
+            <xsd:enumeration value="N"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="stringType">
+        <xsd:annotation>
+            <xsd:documentation>
+                非空字符限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="alphanumericType">
+        <xsd:annotation>
+            <xsd:documentation>
+                数字、字母以及下划线组合限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([a-zA-Z0-9_])+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="misfireStrategyType">
+        <xsd:annotation>
+            <xsd:documentation>
+                quartz触发器触发失败策略限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    DoNothing
+                    ——不做处理
+                    ——等待下次Cron触发频率到达时刻开始按照Cron频率依次执行
+                    IgnoreMisfires
+                    ——以错过的第一个频率时间立刻开始执行
+                    ——重做错过的所有频率周期后
+                    ——当下一次触发频率发生时间大于当前时间后，再按照正常的Cron频率依次执行
+                    FireAndProceed
+                    ——以当前时间为触发频率立刻触发一次执行
+                    ——然后按照Cron频率依次执行
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:enumeration value="DoNothing"/>
+            <xsd:enumeration value="IgnoreMisfires"/>
+            <xsd:enumeration value="FireAndProceed"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>

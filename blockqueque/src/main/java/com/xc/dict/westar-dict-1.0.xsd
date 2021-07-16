@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.cdwestarsoft.com/schema/dict"
+            xmlns="http://www.cdwestarsoft.com/schema/dict"
+            elementFormDefault="qualified">
+
+    <xsd:element name="dict">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="catalog" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="item" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                        <xsd:attribute name="type" type="alphanumericType" use="required"/>
+                        <xsd:attribute name="description" type="stringType" use="required"/>
+                        <xsd:attribute name="isTree" type="booleanType" default="N"/>
+                        <xsd:attribute name="gtCode" type="booleanType" default="N"/>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="namespaceId" type="alphanumericType" use="required"/>
+            <xsd:attribute name="namespaceDesc" type="stringType" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="item">
+        <xsd:annotation>
+            <xsd:documentation>
+                具体字典item元素定义，支持树形结构
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="label" type="stringType" use="required"/>
+            <xsd:attribute name="value" type="alphanumericType" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="alphanumericType">
+        <xsd:annotation>
+            <xsd:documentation>
+                数字、字母以及下划线组合限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([a-zA-Z0-9_])+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="stringType">
+        <xsd:annotation>
+            <xsd:documentation>
+                非空字符限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="booleanType">
+        <xsd:annotation>
+            <xsd:documentation>
+                boolean值限定类型
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Y"/>
+            <xsd:enumeration value="N"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
